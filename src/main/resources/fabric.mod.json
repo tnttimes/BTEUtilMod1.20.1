@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "bteutilmod",
+  "version": "${version}",
+  "name": "BTE Util Mod",
+  "description": "Add your favourite commands to a list and be able to use them with a keybind!",
+  "authors": [
+    "TNT_TIMES"
+  ],
+  "contact": {
+    "repo": "https://github.com/tnttimes/BTEUtilMod1.20.1"
+  },
+  "license": "All-Rights-Reserved",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+    ],
+    "main": [
+      "tnt_times.bteutilmod.BTEUtilMod"
+    ]
+  },
+  "mixins": [
+    "bteutilmod.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
