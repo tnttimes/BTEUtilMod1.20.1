@@ -1,18 +1,21 @@
 package tnt_times.bteutilmod;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.option.GameOptionsScreen;
-import net.minecraft.client.option.GameOptions;
-import net.minecraft.text.Text;
+import io.wispforest.owo.ui.base.BaseOwoScreen;
+import io.wispforest.owo.ui.container.Containers;
+import io.wispforest.owo.ui.container.FlowLayout;
+import io.wispforest.owo.ui.core.OwoUIAdapter;
+import io.wispforest.owo.ui.core.Surface;
+import org.jetbrains.annotations.NotNull;
 
-public class CommandsScreen extends GameOptionsScreen {
+public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
 
-    public CommandsScreen(Screen parent, GameOptions gameOptions, Text title) {
-        super(parent, gameOptions, title);
+    @Override
+    protected @NotNull OwoUIAdapter<FlowLayout> createAdapter() {
+        return OwoUIAdapter.create(this, Containers::verticalFlow);
     }
 
     @Override
-    protected void init() {
-
+    protected void build(FlowLayout rootComponent) {
+        rootComponent.surface(Surface.VANILLA_TRANSLUCENT);
     }
 }

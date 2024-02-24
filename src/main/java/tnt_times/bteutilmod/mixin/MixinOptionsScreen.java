@@ -81,7 +81,7 @@ public class MixinOptionsScreen extends Screen {
         adder.add(this.settings.getFov().createWidget(this.client.options, 0, 0, 150));
         adder.add(this.createTopRightButton());
 
-        adder.add(ButtonWidget.builder(COMMANDS_TEXT, button -> this.client.setScreen(new CommandsScreen(this, this.settings, COMMANDS_TEXT))).width(310).build(), 2);
+        adder.add(ButtonWidget.builder(COMMANDS_TEXT, button -> this.client.setScreen(new CommandsScreen())).width(310).build(), 2);
 
         adder.add(this.createButton(SKIN_CUSTOMIZATION_TEXT, () -> new SkinOptionsScreen(this, this.settings)));
         adder.add(this.createButton(SOUNDS_TEXT, () -> new SoundOptionsScreen(this, this.settings)));
