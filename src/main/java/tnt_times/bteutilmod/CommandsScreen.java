@@ -1,13 +1,30 @@
 package tnt_times.bteutilmod;
 
 import io.wispforest.owo.ui.base.BaseOwoScreen;
+import io.wispforest.owo.ui.component.Components;
 import io.wispforest.owo.ui.container.Containers;
 import io.wispforest.owo.ui.container.FlowLayout;
-import io.wispforest.owo.ui.core.OwoUIAdapter;
-import io.wispforest.owo.ui.core.Surface;
+import io.wispforest.owo.ui.core.*;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
+import net.minecraft.util.DyeColor;
+import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
+
+    private final Screen parent;
+
+    private final FlowLayout commandsContainer = Containers.verticalFlow(Sizing.fill(100), Sizing.content());
+
+    public CommandsScreen(Screen parentScreen){
+        this.parent = parentScreen;
+    }
 
     @Override
     protected @NotNull OwoUIAdapter<FlowLayout> createAdapter() {
@@ -16,6 +33,84 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
 
     @Override
     protected void build(FlowLayout rootComponent) {
-        rootComponent.surface(Surface.VANILLA_TRANSLUCENT);
+        rootComponent.surface(Surface.flat(Color.ofDye(DyeColor.BLACK).argb()))
+                .horizontalAlignment(HorizontalAlignment.CENTER)
+                .verticalAlignment(VerticalAlignment.TOP)
+                .padding(Insets.of(10,0,0,0))
+        ;
+        rootComponent.child(
+                Components.label(Text.translatable("gui.bteutilmod.commands_menu"))
+        );
+
+        rootComponent.child(
+          Components.button(Text.translatable("gui.bteutilmod.add_command").setStyle(Style.EMPTY.withColor(Formatting.GREEN)), buttonComponent -> {
+              addCommandBoxToContainer(commandsContainer);
+          })
+                  .horizontalSizing(Sizing.fixed(170))
+                  .margins(Insets.of(8,8,0,0))
+        );
+
+        rootComponent.child(
+                Containers.verticalScroll(Sizing.fill(70), Sizing.fill(60),
+                        commandsContainer
+                                .padding(Insets.of(0,0,5,5))
+                                .id("commands_container")
+                )
+        );
+
+        rootComponent.child(
+                Containers.verticalFlow(Sizing.fill(100), Sizing.fill(15))
+                        .child(
+                            Components.button(Text.translatable("gui.done"), buttonComponent -> {
+                                MinecraftClient.getInstance().setScreen(parent);})
+                                    .horizontalSizing(Sizing.fixed(200))
+                        )
+                        .surface(Surface.flat(Color.ofDye(DyeColor.GRAY).argb()))
+                        .horizontalAlignment(HorizontalAlignment.CENTER)
+                        .verticalAlignment(VerticalAlignment.CENTER)
+                        .positioning(Positioning.relative(50, 100))
+        );
+    }
+
+    /*
+    private final FlowLayout commandRow = Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
+            .child(
+                    Components.textBox(Sizing.fill(88)).margins(Insets.of(0,7,0,0))
+            )
+            .child(
+                    Components.button(Text.literal("X").setStyle(Style.EMPTY.withColor(Formatting.RED)), buttonComponent -> {
+                                removeCommandBox(commandsContainer);
+                            })
+                            .positioning(Positioning.relative(100, 0))
+            );*/
+
+    private final List<FlowLayout> commandsList = new ArrayList<>();
+
+    private int sessionCommandID = -1;
+
+
+    private void addCommandBoxToContainer(FlowLayout container){
+        commandsList.add(
+                Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
+                        .child(
+                                Components.textBox(Sizing.fill(88)).margins(Insets.of(0,7,0,0))
+                        )
+                        .child(
+                                Components.button(Text.literal("X").setStyle(Style.EMPTY.withColor(Formatting.RED)), buttonComponent -> {
+                                            removeCommandBox(commandsContainer, sessionCommandID);
+                                        })
+                                        .positioning(Positioning.relative(100, 0))
+                        )
+        );
+        container.child(commandsList.get(commandsList.size() - 1));
+        sessionCommandID++;
+        commandsList.get(commandsList.size() - 1).id(Integer.toString(sessionCommandID));
+    }
+
+    private void removeCommandBox(FlowLayout container, int id){
+
+        container.removeChild(commandsList.get(id));
+        commandsList.remove(id);
+        sessionCommandID--;
     }
 }
