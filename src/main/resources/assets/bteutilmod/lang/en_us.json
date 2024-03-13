@@ -1,4 +1,8 @@
 {
   "gui.bteutilmod.commands_menu": "Commands List...",
-  "gui.bteutilmod.add_command": "Add command"
+  "gui.bteutilmod.add_command": "Add command",
+  "bteutilmod.test_command_1": "Command 1",
+  "bteutilmod.test_command_2": "Command 2",
+  "bteutilmod.test_command_3": "Command 3",
+  "bteutilmod.test_command_4": "Command 4"
 }

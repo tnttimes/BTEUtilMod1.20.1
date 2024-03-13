@@ -22,6 +22,8 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
 
     private final FlowLayout commandsContainer = Containers.verticalFlow(Sizing.fill(100), Sizing.content());
 
+    private ArrayList<String> commands;
+
     public CommandsScreen(Screen parentScreen){
         this.parent = parentScreen;
     }
@@ -33,6 +35,7 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
 
     @Override
     protected void build(FlowLayout rootComponent) {
+        commands = CommandsFileHandler.loadCommands();
         rootComponent.surface(Surface.flat(Color.ofDye(DyeColor.BLACK).argb()))
                 .horizontalAlignment(HorizontalAlignment.CENTER)
                 .verticalAlignment(VerticalAlignment.TOP)
@@ -62,7 +65,9 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
                 Containers.verticalFlow(Sizing.fill(100), Sizing.fill(15))
                         .child(
                             Components.button(Text.translatable("gui.done"), buttonComponent -> {
-                                MinecraftClient.getInstance().setScreen(parent);})
+                                CommandsFileHandler.saveCommands(commands);
+                                MinecraftClient.getInstance().setScreen(parent);
+                            })
                                     .horizontalSizing(Sizing.fixed(200))
                         )
                         .surface(Surface.flat(Color.ofDye(DyeColor.GRAY).argb()))
@@ -72,24 +77,12 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
         );
     }
 
-    /*
-    private final FlowLayout commandRow = Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
-            .child(
-                    Components.textBox(Sizing.fill(88)).margins(Insets.of(0,7,0,0))
-            )
-            .child(
-                    Components.button(Text.literal("X").setStyle(Style.EMPTY.withColor(Formatting.RED)), buttonComponent -> {
-                                removeCommandBox(commandsContainer);
-                            })
-                            .positioning(Positioning.relative(100, 0))
-            );*/
-
     private final List<FlowLayout> commandsList = new ArrayList<>();
-
-    private int sessionCommandID = -1;
-
+    private int sessionCommandID = 0;
 
     private void addCommandBoxToContainer(FlowLayout container){
+        final int x = sessionCommandID;
+
         commandsList.add(
                 Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
                         .child(
@@ -97,20 +90,25 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
                         )
                         .child(
                                 Components.button(Text.literal("X").setStyle(Style.EMPTY.withColor(Formatting.RED)), buttonComponent -> {
-                                            removeCommandBox(commandsContainer, sessionCommandID);
+                                            removeCommandBox(commandsContainer, x);
                                         })
                                         .positioning(Positioning.relative(100, 0))
                         )
         );
         container.child(commandsList.get(commandsList.size() - 1));
-        sessionCommandID++;
         commandsList.get(commandsList.size() - 1).id(Integer.toString(sessionCommandID));
+        sessionCommandID++;
     }
 
     private void removeCommandBox(FlowLayout container, int id){
-
-        container.removeChild(commandsList.get(id));
-        commandsList.remove(id);
-        sessionCommandID--;
+        for (FlowLayout layout:commandsList) {
+            if(layout.id() != null){
+                if(Integer.parseInt(layout.id()) == id){
+                    container.removeChild(layout);
+                    commandsList.remove(layout);
+                    break;
+                }
+            }
+        }
     }
 }

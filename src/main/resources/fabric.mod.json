@@ -14,6 +14,7 @@
   "environment": "*",
   "entrypoints": {
     "client": [
+      "tnt_times.bteutilmod.KeyBindingsTest"
     ],
     "main": [
       "tnt_times.bteutilmod.BTEUtilMod"
