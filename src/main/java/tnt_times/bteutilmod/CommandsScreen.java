@@ -2,6 +2,7 @@ package tnt_times.bteutilmod;
 
 import io.wispforest.owo.ui.base.BaseOwoScreen;
 import io.wispforest.owo.ui.component.Components;
+import io.wispforest.owo.ui.component.TextBoxComponent;
 import io.wispforest.owo.ui.container.Containers;
 import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.core.*;
@@ -36,6 +37,11 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
     @Override
     protected void build(FlowLayout rootComponent) {
         commands = CommandsFileHandler.loadCommands();
+
+        for(String t:commands){
+            addCommandBoxToContainer(commandsContainer, t);
+        }
+
         rootComponent.surface(Surface.flat(Color.ofDye(DyeColor.BLACK).argb()))
                 .horizontalAlignment(HorizontalAlignment.CENTER)
                 .verticalAlignment(VerticalAlignment.TOP)
@@ -65,7 +71,7 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
                 Containers.verticalFlow(Sizing.fill(100), Sizing.fill(15))
                         .child(
                             Components.button(Text.translatable("gui.done"), buttonComponent -> {
-                                CommandsFileHandler.saveCommands(commands);
+                                save();
                                 MinecraftClient.getInstance().setScreen(parent);
                             })
                                     .horizontalSizing(Sizing.fixed(200))
@@ -78,15 +84,56 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
     }
 
     private final List<FlowLayout> commandsList = new ArrayList<>();
+    private final List<TextBoxComponent> textBoxes = new ArrayList<>();
     private int sessionCommandID = 0;
+
+    private void createTextBox(){
+        final int x = sessionCommandID;
+        TextBoxComponent c = (TextBoxComponent) Components.textBox(Sizing.fill(88))
+                .margins(Insets.of(0,7,0,0))
+                .id(Integer.toString(x));
+        textBoxes.add(c);
+    }
+
+    private void createTextBox(String text){
+        final int x = sessionCommandID;
+        TextBoxComponent c = (TextBoxComponent) Components.textBox(Sizing.fill(88))
+                .text(text)
+                .margins(Insets.of(0,7,0,0))
+                .id(Integer.toString(x));
+
+        textBoxes.add(c);
+    }
 
     private void addCommandBoxToContainer(FlowLayout container){
         final int x = sessionCommandID;
 
+        createTextBox();
         commandsList.add(
                 Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
                         .child(
-                                Components.textBox(Sizing.fill(88)).margins(Insets.of(0,7,0,0))
+                                textBoxes.get(commandsList.size())
+                        )
+                        .child(
+                                Components.button(Text.literal("X").setStyle(Style.EMPTY.withColor(Formatting.RED)), buttonComponent -> {
+                                            removeCommandBox(commandsContainer, x);
+                                        })
+                                        .positioning(Positioning.relative(100, 0))
+                        )
+        );
+        container.child(commandsList.get(commandsList.size() - 1));
+        commandsList.get(commandsList.size() - 1).id(Integer.toString(sessionCommandID));
+        sessionCommandID++;
+    }
+
+    private void addCommandBoxToContainer(FlowLayout container, String commandString){
+        final int x = sessionCommandID;
+
+        createTextBox(commandString);
+        commandsList.add(
+                Containers.horizontalFlow(Sizing.fill(100), Sizing.content())
+                        .child(
+                                textBoxes.get(commandsList.size())
                         )
                         .child(
                                 Components.button(Text.literal("X").setStyle(Style.EMPTY.withColor(Formatting.RED)), buttonComponent -> {
@@ -110,5 +157,21 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
                 }
             }
         }
+        for (Component c:textBoxes) {
+            if(c.id() != null){
+                if(Integer.parseInt(c.id()) == id){
+                    textBoxes.remove(c);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void save(){
+        commands.clear();
+        for(TextBoxComponent c:textBoxes){
+            commands.add(c.getText());
+        }
+        CommandsFileHandler.saveCommands(commands);
     }
 }
