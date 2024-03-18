@@ -10,8 +10,6 @@ import java.util.ArrayList;
 public class CommandsFileHandler {
     private static final String fileName = "commandsList.txt";
     public static void saveCommands(ArrayList<String> commands){
-        Path file = FabricLoader.getInstance().getConfigDir().resolve(fileName);
-
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))){
             for (String s:commands) {
                 writer.write(s);
@@ -24,7 +22,6 @@ public class CommandsFileHandler {
     }
 
     public static ArrayList<String> loadCommands(){
-        Path file = FabricLoader.getInstance().getConfigDir().resolve(fileName);
         ArrayList<String> commandList = new ArrayList<>();
         try(BufferedReader reader = new BufferedReader(new FileReader(fileName))){
             String line;

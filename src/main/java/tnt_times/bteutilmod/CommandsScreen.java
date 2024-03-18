@@ -173,5 +173,6 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
             commands.add(c.getText());
         }
         CommandsFileHandler.saveCommands(commands);
+        KeyBindingManagement.createBindings();
     }
 }
