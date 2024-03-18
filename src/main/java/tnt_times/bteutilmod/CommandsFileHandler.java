@@ -1,10 +1,6 @@
 package tnt_times.bteutilmod;
 
-import net.fabricmc.loader.api.FabricLoader;
-
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class CommandsFileHandler {

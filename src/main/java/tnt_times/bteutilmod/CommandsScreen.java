@@ -23,7 +23,7 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
 
     private final FlowLayout commandsContainer = Containers.verticalFlow(Sizing.fill(100), Sizing.content());
 
-    private ArrayList<String> commands;
+    private ArrayList<String> loadedCommandsStrings;
 
     public CommandsScreen(Screen parentScreen){
         this.parent = parentScreen;
@@ -36,9 +36,9 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
 
     @Override
     protected void build(FlowLayout rootComponent) {
-        commands = CommandsFileHandler.loadCommands();
+        loadedCommandsStrings = CommandsFileHandler.loadCommands();
 
-        for(String t:commands){
+        for(String t: loadedCommandsStrings){
             addCommandBoxToContainer(commandsContainer, t);
         }
 
@@ -72,7 +72,6 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
                         .child(
                             Components.button(Text.translatable("gui.done"), buttonComponent -> {
                                 save();
-                                MinecraftClient.getInstance().setScreen(parent);
                             })
                                     .horizontalSizing(Sizing.fixed(200))
                         )
@@ -167,12 +166,33 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
         }
     }
 
-    private void save(){
-        commands.clear();
+    private Boolean areEmptyBoxes(){
         for(TextBoxComponent c:textBoxes){
-            commands.add(c.getText());
+            if(c.getText().equals("")){
+                c.setPlaceholder(Text.literal("DON'T LEAVE ME BLANK"));
+                return true;
+            }
         }
-        CommandsFileHandler.saveCommands(commands);
-        KeyBindingManagement.createBindings();
+        return false;
+    }
+
+    private final ArrayList<String> finalCommandsStrings = new ArrayList<>();
+
+    private void save(){
+        if(areEmptyBoxes()){
+            return;
+        }
+        textBoxesToString();
+        if(finalCommandsStrings.equals(loadedCommandsStrings)){
+            MinecraftClient.getInstance().setScreen(parent);
+            return;
+        }
+        MinecraftClient.getInstance().setScreen(new ConfirmCommandsScreen(parent, loadedCommandsStrings, textBoxes));
+    }
+
+    private void textBoxesToString(){
+        for(TextBoxComponent c:textBoxes){
+            finalCommandsStrings.add(c.getText());
+        }
     }
 }
