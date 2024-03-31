@@ -26,7 +26,14 @@ public class KeyBindingManagement implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             for (KeyBinding b : bindList) {
                 while (b.wasPressed()){
-                    client.player.sendMessage(Text.literal(b.getTranslationKey()), false);
+                    String text = b.getTranslationKey();
+                    //client.player.sendMessage(Text.literal(b.getTranslationKey()), false);
+                    //client.getServer().sendMessage(Text.literal(b.getTranslationKey()));
+                    if(text.startsWith("/")){
+                        client.player.networkHandler.sendChatCommand(text.substring(1));
+                    }else{
+                        client.player.networkHandler.sendChatMessage(text);
+                    }
                 }
             }
         });
