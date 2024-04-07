@@ -91,6 +91,7 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
         TextBoxComponent c = (TextBoxComponent) Components.textBox(Sizing.fill(88))
                 .margins(Insets.of(0,7,0,0))
                 .id(Integer.toString(x));
+        c.setMaxLength(255);
         textBoxes.add(c);
     }
 
@@ -100,7 +101,7 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
                 .text(text)
                 .margins(Insets.of(0,7,0,0))
                 .id(Integer.toString(x));
-
+        c.setMaxLength(255);
         textBoxes.add(c);
     }
 

@@ -51,6 +51,7 @@ public class ConfirmCommandsScreen extends BaseOwoScreen<FlowLayout> {
         );
         rootComponent.child(
                 Components.button(Text.translatable("gui.no").setStyle(Style.EMPTY.withColor(Formatting.RED)), buttonComponent -> {
+                            save();
                             MinecraftClient.getInstance().setScreen(new CommandsScreen(subParent));
                         })
                         .horizontalSizing(Sizing.fixed(170))
