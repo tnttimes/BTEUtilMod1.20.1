@@ -7,6 +7,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class KeyBindingManagement implements ClientModInitializer {
 
@@ -33,9 +35,21 @@ public class KeyBindingManagement implements ClientModInitializer {
                         text = text.replace("[cp]", cp);
                     }
 
-                    if(text.contains("[ph]")){
-                        String playerHeight = Double.toString(MinecraftClient.getInstance().player.getPos().y);
-                        text = text.replace("[ph]", playerHeight);
+                    if(text.contains("[ph")){
+                        if(text.contains("[ph]")){
+                            String playerHeight = Double.toString(MinecraftClient.getInstance().player.getPos().y);
+                            text = text.replace("[ph]", playerHeight);
+                        }else{
+                            Pattern pattern = Pattern.compile("\\[ph(.*?)\\]");
+
+                            Matcher matcher = pattern.matcher(text);
+
+                            while (matcher.find()){
+                                double heightOffset = Double.parseDouble(matcher.group(1).trim());
+                                double playerHeight = MinecraftClient.getInstance().player.getPos().y;
+                                text = text.replace("[ph".concat(matcher.group(1).trim()).concat("]"), Double.toString(playerHeight + heightOffset));
+                            }
+                        }
                     }
 
                     if(text.startsWith("/")){
