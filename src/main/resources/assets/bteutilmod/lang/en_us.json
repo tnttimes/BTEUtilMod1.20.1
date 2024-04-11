@@ -1,5 +1,8 @@
 {
   "gui.bteutilmod.commands_menu": "Commands List...",
   "gui.bteutilmod.add_command": "Add command",
-  "gui.bteutilmod.confirm_changes": "For the changes to apply you have to restart you game.\nYou wish to proceed?"
+  "gui.bteutilmod.confirm_changes": "For the changes to apply you have to restart you game.\nYou wish to proceed?",
+  "gui.bteutilmod.inst_cp": "Type §a[cp]§r to be replaced with your clipboard. \nExample: /tpll §a[cp]§r",
+  "gui.bteutilmod.inst_ph": "Type §6[ph]§r to be replaced with your player y value. \nExample: /tpll [cp] §6[ph]§r",
+  "gui.bteutilmod.inst_phx": "§e[ph___]§r can be used with a integer offset. \nExample: /tpll [cp] §e[ph1904]§r\n If your y=10 the command will be /tpll xx xx 1914"
 }
