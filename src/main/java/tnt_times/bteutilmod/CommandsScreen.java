@@ -48,19 +48,36 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
                 .padding(Insets.of(10,0,0,0))
         ;
         rootComponent.child(
-                Components.label(Text.translatable("gui.bteutilmod.commands_menu"))
+                Components.label(Text.translatable("gui.bteutilmod.commands_menu")).margins(Insets.of(0,10,0,0))
         );
 
         rootComponent.child(
-          Components.button(Text.translatable("gui.bteutilmod.add_command").setStyle(Style.EMPTY.withColor(Formatting.GREEN)), buttonComponent -> {
-              addCommandBoxToContainer(commandsContainer);
-          })
-                  .horizontalSizing(Sizing.fixed(170))
-                  .margins(Insets.of(8,8,0,0))
+                Containers.horizontalFlow(Sizing.fill(70), Sizing.content())
+                        .child(Components
+                                .label(Text.literal("[cp]").setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN)))
+                                .tooltip(Text.translatable("gui.bteutilmod.inst_cp"))
+                                .margins(Insets.of(0,0,12,12)))
+                        .child(Components
+                                .label(Text.literal("[ph]").setStyle(Style.EMPTY.withColor(Formatting.GOLD)))
+                                .tooltip(Text.translatable("gui.bteutilmod.inst_ph"))
+                                .margins(Insets.of(0,0,12,12)))
+                        .child(Components
+                                .label(Text.literal("[ph____]").setStyle(Style.EMPTY.withColor(Formatting.YELLOW)))
+                                .tooltip(Text.translatable("gui.bteutilmod.inst_phx"))
+                                .margins(Insets.of(0,0,12,12)))
+                        .horizontalAlignment(HorizontalAlignment.CENTER)
         );
 
         rootComponent.child(
-                Containers.verticalScroll(Sizing.fill(70), Sizing.fill(60),
+                Components.button(Text.translatable("gui.bteutilmod.add_command").setStyle(Style.EMPTY.withColor(Formatting.GREEN)), buttonComponent -> {
+                            addCommandBoxToContainer(commandsContainer);
+                        })
+                        .horizontalSizing(Sizing.fixed(170))
+                        .margins(Insets.of(8,8,0,0))
+        );
+
+        rootComponent.child(
+                Containers.verticalScroll(Sizing.fill(70), Sizing.fill(55),
                         commandsContainer
                                 .padding(Insets.of(0,0,5,5))
                                 .id("commands_container")
@@ -70,10 +87,10 @@ public class CommandsScreen extends BaseOwoScreen<FlowLayout> {
         rootComponent.child(
                 Containers.verticalFlow(Sizing.fill(100), Sizing.fill(15))
                         .child(
-                            Components.button(Text.translatable("gui.done"), buttonComponent -> {
-                                save();
-                            })
-                                    .horizontalSizing(Sizing.fixed(200))
+                                Components.button(Text.translatable("gui.done"), buttonComponent -> {
+                                            save();
+                                        })
+                                        .horizontalSizing(Sizing.fixed(200))
                         )
                         .surface(Surface.flat(Color.ofDye(DyeColor.GRAY).argb()))
                         .horizontalAlignment(HorizontalAlignment.CENTER)
