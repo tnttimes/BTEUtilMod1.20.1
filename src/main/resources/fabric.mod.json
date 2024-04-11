@@ -27,5 +27,6 @@
     "fabricloader": "0.15.*",
     "fabric": "*",
     "minecraft": "${minecraft_version}"
-  }
+  },
+  "icon": "assets/bteutilmod/logo/logo.png"
 }
