@@ -12,8 +12,22 @@ import java.util.regex.Pattern;
 
 public class KeyBindingManagement implements ClientModInitializer {
 
+    private static KeyBinding openCommandsMenuKeyBind;
+
     @Override
     public void onInitializeClient() {
+        openCommandsMenuKeyBind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.bteutilmod.open_menu",
+                -1,
+                "BTE Util Mod Menu"
+        ));
+
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+           while (openCommandsMenuKeyBind.wasPressed()){
+               client.setScreen(new CommandsScreen(null));
+           }
+        });
+
         createBindings();
     }
 
